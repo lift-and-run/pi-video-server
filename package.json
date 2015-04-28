@@ -1,0 +1,9 @@
+{
+"name": "pi_video_server",
+"version": "0.0.1",
+"description": "Server that gives pseudo-video from remote webcam",
+"dependencies": {
+"socket.io": "~0.9.6",
+"mime": "~1.2.7"
+}
+}
