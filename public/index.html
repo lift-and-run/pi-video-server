@@ -7,19 +7,19 @@
 </head>
 
 <body>
-<img id="video" src="data:image/jpg;base64,##anchor##">
+<img id="video" src="data:image/jpg;base64,##anchor##" onload = 'onLoadImage()'>
 <script src="/socket.io/socket.io.js"></script>
 <script>
     var socket = io.connect();
 	
-	function test() {
-	    socket.emit('client_data', {'letter': 'smth'});
-	};
-
     socket.on('message', function(data){
         var video = document.getElementById("video");
-		video.src = "data:image/jpg;base64," + data.message;
+        video.src = "data:image/jpg;base64," + data.message;
     });
+    
+    function onLoadImage () {
+        socket.emit('imageHasBeenLoaded');
+    }
 
 </script>
 </body>
