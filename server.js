@@ -2,6 +2,8 @@ var io = require("socket.io"),
     http = require("http"),
     fs = require("fs");
 
+var videoFilePath = "/tmp/web_cam_data/1.jpg"
+
 var htmlBody = fs.readFileSync("public/index.html","utf-8");
 
 var clients = [];
@@ -17,7 +19,7 @@ function encodFileBase64(path) {
 	
 var server = http.createServer(function(request, response) {
     response.writeHead(200, {"Content-type":"text/html"});
-    //imageB64Encoded = encodFileBase64("web_cam_data/1.jpg");
+    //imageB64Encoded = encodFileBase64(videoFilePath);
     //response.end(htmlBody.replace('##anchor##', imageB64Encoded));
     response.end(htmlBody);
 });
@@ -31,7 +33,7 @@ sockvar.set('log level', 1);
 sockvar.sockets.on('connection', function(socket){
     console.log("          event is 'connection'");
     clients.push({"socketId":socket.id, "isTransmiting":false});
-    imageB64Encoded = encodFileBase64("web_cam_data/1.jpg");
+    imageB64Encoded = encodFileBase64(videoFilePath);
     socket.emit('message', {'message': imageB64Encoded});
     
     socket.on('disconnect', function() {
@@ -56,12 +58,11 @@ sockvar.sockets.on('connection', function(socket){
 
 
 
-//fs.watch('web_cam_data/1.jpg', function (event, filename) {
-fs.watch('web_cam_data/', function (event, filename) {
+fs.watch(videoFilePath, function (event, filename) {
     console.log('          event is: ' + event);
     //console.log(event);
     		
-    imageB64Encoded = encodFileBase64("web_cam_data/1.jpg");
+    imageB64Encoded = encodFileBase64(videoFilePath);
 
     if (imageB64Encoded.length !=0) {
         for (var i=0; i<clients.length; i++) {
